@@ -1,0 +1,56 @@
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
+
+LiquidCrystal_I2C lcd(0x27, 16, 2);
+
+const int trigPin = 7;
+const int echoPin = 6;
+
+long timeOfFlight;   // in microseconds
+float distance;      // in cm
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+
+  lcd.begin(16, 2);
+  lcd.backlight();
+
+  Serial.println("Ultrasonic Sensor - Time of Flight Measurement");
+}
+
+void loop() {
+  // Send 10 µs pulse
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+
+  // Measure round-trip time (µs)
+  timeOfFlight = pulseIn(echoPin, HIGH);
+
+  // Distance = (ToF * speed of sound) / 2
+  distance = (timeOfFlight * 0.0343) / 2;
+
+  // Print on Serial Monitor
+  Serial.print("Time of Flight: ");
+  Serial.print(timeOfFlight);
+  Serial.print(" us | Distance: ");
+  Serial.print(distance);
+  Serial.println(" cm");
+
+  // Print on LCD
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("ToF: ");
+  lcd.print(timeOfFlight);
+  lcd.print(" us");
+  lcd.setCursor(0, 1);
+  lcd.print("Dist: ");
+  lcd.print(distance);
+  lcd.print(" cm");
+
+  delay(500);
+}

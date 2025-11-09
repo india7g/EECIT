@@ -1,0 +1,55 @@
+// Pin connections
+const int button1 = 2;
+const int button2 = 3;
+const int button3 = 4;
+
+const int led1 = 8;
+const int led2 = 9;
+const int led3 = 10;
+
+void setup() {
+  // Set button pins as input with internal pull-up
+  pinMode(button1, INPUT_PULLUP);
+  pinMode(button2, INPUT_PULLUP);
+  pinMode(button3, INPUT_PULLUP);
+
+  // Set LED pins as output
+  pinMode(led1, OUTPUT);
+  pinMode(led2, OUTPUT);
+  pinMode(led3, OUTPUT);
+
+  // Start Serial Monitor
+  Serial.begin(9600);
+  Serial.println("System Ready: Press Buttons to control LEDs");
+}
+
+void loop() {
+  // Button 1 -> LED 1
+  if (digitalRead(button1) == LOW) {   // Button pressed
+    digitalWrite(led1, HIGH);
+    Serial.println("LED 1 ON");
+  } else {
+    digitalWrite(led1, LOW);
+    Serial.println("LED 1 OFF");
+  }
+
+  // Button 2 -> LED 2
+  if (digitalRead(button2) == LOW) {
+    digitalWrite(led2, HIGH);
+    Serial.println("LED 2 ON");
+  } else {
+    digitalWrite(led2, LOW);
+    Serial.println("LED 2 OFF");
+  }
+
+  // Button 3 -> LED 3
+  if (digitalRead(button3) == LOW) {
+    digitalWrite(led3, HIGH);
+    Serial.println("LED 3 ON");
+  } else {
+    digitalWrite(led3, LOW);
+    Serial.println("LED 3 OFF");
+  }
+
+  delay(200); // Small delay to avoid too many prints
+}

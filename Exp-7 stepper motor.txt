@@ -1,0 +1,57 @@
+// ULN2003 + 28BYJ-48 Stepper Motor
+// Arduino UNO pins: IN1=2, IN2=3, IN3=4, IN4=5
+
+int IN1 = 2;
+int IN2 = 3;
+int IN3 = 4;
+int IN4 = 5;
+
+// Half-step sequence (8 steps for smoother movement)
+int stepSequence[8][4] = {
+  {1, 0, 0, 0},
+  {1, 1, 0, 0},
+  {0, 1, 0, 0},
+  {0, 1, 1, 0},
+  {0, 0, 1, 0},
+  {0, 0, 1, 1},
+  {0, 0, 0, 1},
+  {1, 0, 0, 1}
+};
+
+int stepIndex = 0;        // Current step
+int stepsPerRev = 2048;   // 28BYJ-48 ~2048 steps per revolution
+int stepDelay = 2000;      // Microseconds delay (change this for speed)
+
+void setup() {
+  pinMode(IN1, OUTPUT);
+  pinMode(IN2, OUTPUT);
+  pinMode(IN3, OUTPUT);
+  pinMode(IN4, OUTPUT);
+}
+
+void loop() {
+  // Rotate clockwise one revolution
+  for (int i = 0; i < stepsPerRev; i++) {
+    stepMotor(stepIndex);
+    stepIndex++;
+    if (stepIndex > 7) stepIndex = 0;
+    delayMicroseconds(stepDelay);
+  }
+  delay(500); // short pause
+
+  // Rotate anticlockwise one revolution
+  for (int i = 0; i < stepsPerRev; i++) {
+    stepMotor(stepIndex);
+    stepIndex--;
+    if (stepIndex < 0) stepIndex = 7;
+    delayMicroseconds(stepDelay);
+  }
+  delay(500); // short pause
+}
+
+void stepMotor(int idx) {
+  digitalWrite(IN1, stepSequence[idx][0]);
+  digitalWrite(IN2, stepSequence[idx][1]);
+  digitalWrite(IN3, stepSequence[idx][2]);
+  digitalWrite(IN4, stepSequence[idx][3]);
+}

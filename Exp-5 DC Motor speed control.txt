@@ -1,0 +1,22 @@
+// DC Motor speed control with Potentiometer and L298N
+int potPin = A0;       // Potentiometer pin
+int ENA = 10;          // PWM pin for speed
+int IN1 = 8;           // Motor direction pin 1
+int IN2 = 9;           // Motor direction pin 2
+
+void setup() {
+  pinMode(ENA, OUTPUT);
+  pinMode(IN1, OUTPUT);
+  pinMode(IN2, OUTPUT);
+
+  // Set initial direction
+  digitalWrite(IN1, HIGH);
+  digitalWrite(IN2, LOW);
+}
+
+void loop() {
+  int potValue = analogRead(potPin);      // Read potentiometer (0-1023)
+  int motorSpeed = map(potValue, 0, 1023, 0, 255); // Map to PWM (0-255)
+
+  analogWrite(ENA, motorSpeed);           // Control motor speed
+}
